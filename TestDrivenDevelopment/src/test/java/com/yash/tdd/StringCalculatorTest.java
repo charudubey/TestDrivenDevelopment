@@ -1,19 +1,17 @@
 package com.yash.tdd;
-import static org.junit.Assert.*;
-import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.verify;
 
 import java.util.logging.Logger;
 
 import org.junit.Assert;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.runners.MockitoJUnitRunner;
-
-import com.yash.tdd.StringCalculator;
 
 @RunWith(MockitoJUnitRunner.class)
 public class StringCalculatorTest {
@@ -24,7 +22,8 @@ public class StringCalculatorTest {
 	@InjectMocks
 	StringCalculator stringCalculatorInstance; 
 	
-	//StringCalculator stringCalculator = new StringCalculator();
+	@Rule
+	public ExpectedException expectedEx = ExpectedException.none();
 	
 	@Test
 	public void shouldReturnZeroWhenInputisEmpty() {
@@ -37,9 +36,9 @@ public class StringCalculatorTest {
 	@Test
 	public void shouldReturnSingleIntegerWhenInputIsSingleNumber(){
 
-		int actual = stringCalculatorInstance.add("-1");
+		int actual = stringCalculatorInstance.add("1");
 		
-		Assert.assertEquals(-1, actual);
+		Assert.assertEquals(1, actual);
 	}
 	
 	@Test
@@ -53,9 +52,9 @@ public class StringCalculatorTest {
 	@Test
 	public void shouldReturnSumOfIntegersWhenInputIsMoreThanTwoNumbersSeperatedByComma(){
 
-		int actual = stringCalculatorInstance.add("1,-2,3,4");
+		int actual = stringCalculatorInstance.add("1,2,3,4");
 		
-		Assert.assertEquals(6, actual);
+		Assert.assertEquals(10, actual);
 	}
 	
 	@Test
@@ -85,9 +84,21 @@ public class StringCalculatorTest {
 	
 	@Test
 	public void shouldLogTheSum(){
+		
 		Mockito.doNothing().when(logger).info("3");
 		int actual = stringCalculatorInstance.add("1,2");
+		
 		verify(logger).info("3");
+	}
+	
+	@Test
+	public void shouldThrowNegativeNotAllowedExceptionIfNegativeValueIsPassed(){
+
+		expectedEx.expect(RuntimeException.class);
+		expectedEx.expectMessage("Negatives not allowed! Negative values passed are: [-1, -4, -8]");
+		
+		int actual = stringCalculatorInstance.add("-1,2,-4,-8");
+		//int actual = stringCalculatorInstance.add("1,2,4,8");
 	}
 	
 
