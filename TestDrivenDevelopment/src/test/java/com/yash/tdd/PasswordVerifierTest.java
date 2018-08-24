@@ -1,8 +1,10 @@
 package com.yash.tdd;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertTrue;
 
-import org.junit.Ignore;
+import java.util.ArrayList;
+import java.util.List;
+
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
@@ -13,15 +15,6 @@ public class PasswordVerifierTest {
 	public ExpectedException expectedEx = ExpectedException.none();
 	
 	PasswordVerifier passwordVerifier = new PasswordVerifier();
-	
-	@Test
-	@Ignore
-	public void shouldReturnFalseWhenPasswordIsNotLargerThan8Characters() {
-		
-		Boolean actual = passwordVerifier.varify("PASS");
-		
-		assertFalse(actual);
-	}
 	
 	@Test
 	public void shouldReturnTrueWhenPasswordIsLargerThan8Characters() {
@@ -36,33 +29,15 @@ public class PasswordVerifierTest {
 		
 		expectedEx.expect(RuntimeException.class);
 		expectedEx.expectMessage("Password should not be null");
-		Boolean actual = passwordVerifier.varify(null);
+		passwordVerifier.varify(null);
 	}
 	
 	@Test
-	@Ignore
-	public void shouldReturnFalseWhenPasswordDoesNotHaveAtleastOneLowerCase() {
-		
-		Boolean actual = passwordVerifier.varify("YASHTECHNO");
-		
-		assertFalse(actual);
-	}
-	
-	@Test
-	public void shouldReturnTrueWhenPasswordHasAtleastOneLowerCase() {
+	public void shouldReturnTrueWhenPasswordHasAtleastOneLowerCaseCharacter() {
 		
 		Boolean actual = passwordVerifier.varify("yashtechnologies");
 		
 		assertTrue(actual);
-	}
-	
-	@Test
-	@Ignore
-	public void shouldReturnFalseWhenPasswordDoesNotHaveAtleastOneUpperCase() {
-		
-		Boolean actual = passwordVerifier.varify("yashtech");
-		
-		assertFalse(actual);
 	}
 	
 	@Test
@@ -71,15 +46,6 @@ public class PasswordVerifierTest {
 		Boolean actual = passwordVerifier.varify("YashTechno");
 		
 		assertTrue(actual);
-	}
-	
-	@Test
-	@Ignore
-	public void shouldReturnFalseWhenPasswordDoesNotHaveAtleastOneNumber() {
-		
-		Boolean actual = passwordVerifier.varify("YASHTECH");
-		
-		assertFalse(actual);
 	}
 	
 	@Test
@@ -100,21 +66,37 @@ public class PasswordVerifierTest {
 	
 	@Test
 	public void shouldThrowExceptionWhenPasswordDoesNotFulfillAtleast3Conditions() {
+		List<String> expected = new ArrayList<String>();
+		expected.add("Password should be greater than 8 numbers");
+		expected.add("Password should have atleast one uppercase character");
+		expected.add("Password should have atleast one number");
 		
 		expectedEx.expect(RuntimeException.class);
-		//expectedEx.expectMessage("Conditions not satisfied are: ");
+		expectedEx.expectMessage("Password is Invalid! Should satisfy atlest one of these conditions: " + expected);
 		
-		Boolean actual = passwordVerifier.varify("yash");
+		passwordVerifier.varify("yash");
 	}
 	
+	@Test
+	public void shouldThrowExceptionWhenPasswordDoesNotHaveAtleastOneLowercase() {
+		
+		expectedEx.expect(RuntimeException.class);
+		expectedEx.expectMessage("Password should have atleast one lowercase character");
+		
+		passwordVerifier.varify("YASH12345");
+	}
 	
 	@Test
 	public void shouldThrowExceptionWhenPasswordDoesNotSatisfyAtlestThreeConditions() {
+		List<String> expected = new ArrayList<String>();
+		expected.add("Password should be greater than 8 numbers");
+		expected.add("Password should have atleast one uppercase character");
+		expected.add("Password should have atleast one number");
 		
 		expectedEx.expect(RuntimeException.class);
-		expectedEx.expectMessage("Conditions not satisfied are: ");
+		expectedEx.expectMessage("Password is Invalid! Should satisfy atlest one of these conditions: " + expected);
 		
-		Boolean actual = passwordVerifier.varify("YASH");
+		passwordVerifier.varify("yash");
 		
 	}
 	

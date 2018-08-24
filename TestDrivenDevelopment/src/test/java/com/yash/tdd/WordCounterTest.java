@@ -6,10 +6,10 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.junit.Test;
 
-import com.sun.javafx.collections.MappingChange.Map;
 import com.yash.tdd.WordCounter;
 
 public class WordCounterTest {
@@ -18,24 +18,13 @@ public class WordCounterTest {
 	
 	@Test
 	public void shouldReturnCollectionOfUniqueWordsWhenStringContainsSpaceAsDelimiter() {
-		HashMap<String,Integer> expected = new HashMap<String,Integer>();
+		Map<String,Long> expected = new HashMap<String,Long>();
 		
-		HashMap<String,Integer> actual = wordCounter.getUnique("boom bang boom");
-		expected.put("boom", 2);
-		expected.put("bang", 1);
+		Map<String,Long> actual = wordCounter.getUnique("boom bang boom");
+		expected.put("boom", 2L);
+		expected.put("bang", 1L);
 
 		assertEquals(expected, actual);
 	}
 	
-	/*@Test
-	public void shouldReturnCollectionOfUniqueWordsWhenStringContainsCommaAsDelimiter() {
-		HashMap<String,Integer> expected = new HashMap<String,Integer>();
-		
-		HashMap<String,Integer> actual = wordCounter.getUnique("boom, bang, boom");
-		expected.put("boom", 2);
-		expected.put("bang", 1);
-
-		assertEquals(expected, actual);
-	}*/
-
 }
